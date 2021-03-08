@@ -1,4 +1,4 @@
-#include "../include/readKin.h"
+#include "readKin.h"
 
 // load root libraries!
 #include "TROOT.h"
@@ -9,8 +9,8 @@
 #include "TTree.h"
 #include "TProfile.h"
 
+#define kin_path "data/ibd/ibdConstAlongEne2_FromZ1_10000.kin"
 //#define kin_path "data/ibd/ibdConstAlongEne_FromZ1_10000.kin"
-#define kin_path "data/ibd/ibdConstAlongEne1_FromZ1_10000.kin"
 #define out_path "output/ROOT/kin_results.root"
 
 #define EN_TH 2
@@ -81,15 +81,19 @@ int main(){
     //set up tree
     Float_t nuebar_energy;
     Float_t ebar_energy;
-    Float_t ebar_cos;   // deflection angle of the positron
+    Float_t n_energy;
+    Float_t ebar_cos;   // angle of the positron
+    Float_t n_cos;      // angle of neutron 
     Float_t ex, ey, ez; // direction of positron
     Float_t nx, ny, nz; // direction of neutron
     
 
     tree->Branch("nuebar_energy", &nuebar_energy, "nuebar_energy/F");
     tree->Branch("ebar_energy", &ebar_energy, "ebar_energy/F");
+    tree->Branch("n_energy", &n_energy, "n_energy/F");
 
     tree->Branch("ebar_cos", &ebar_cos, "ebar_cos/F");
+    tree->Branch("n_cos", &n_cos, "n_cos/F");
 
 
     tree->Branch("ex", &ex, "ex/F");
@@ -114,7 +118,10 @@ int main(){
         ebar_energy = current.ebar_en;
         ebar_cos = current.getCosEbar();
 
-        if(nuebar_energy < EN_TH) continue;
+        n_energy = current.n_en;
+        n_cos = current.getCosN();
+
+        if(nuebar_energy < EN_TH || nuebar_energy > 100) continue;
 
         ex = current.ebar_dir[XDIR];
         ey = current.ebar_dir[YDIR];

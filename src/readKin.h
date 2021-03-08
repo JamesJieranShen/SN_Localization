@@ -1,16 +1,9 @@
-#include <cmath>
+#include "math.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-#define IBD -93
-#define NUEBAR -12
-#define EBAR -11
-#define PROTON 2212
-#define NEUTRON 2112
-
-#define e0_n 939.565    // rest mass of neutron
-#define e0_e 0.511      // rest mass of electron
+#include "constants.h"
 
 #define XDIR 0
 #define YDIR 1
@@ -41,7 +34,6 @@ struct kin_ibd_event{
     double n_dir[3];        // neutron , x, y, z; normalized
     double u_dir[3];        // momentum vector, normalized
 
-    double p_total;         // total momentum of positron and neutron
 
     
     
@@ -80,8 +72,6 @@ struct kin_ibd_event{
             norm_factor += u_dir[i] * u_dir[i]; // norm is effectively overall momentum squared
         }
 
-        this->p_total = sqrt(norm_factor);
-
         /* // u = n-ebar
         for(int i = 0; i < 3; i++){
             u_dir[i] = n_dir[i] - ebar_dir[i];
@@ -117,6 +107,10 @@ struct kin_ibd_event{
 
     double getCosEbar(){
         return -ebar_dir[ZDIR];
+    }
+
+    double getCosN(){
+        return -n_dir[ZDIR];
     }
 
 
